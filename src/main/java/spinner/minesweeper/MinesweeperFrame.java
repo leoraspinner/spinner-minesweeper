@@ -1,5 +1,4 @@
 package spinner.minesweeper;
-/*The View (UI) */
 
 import javax.swing.*;
 import java.awt.*;
@@ -51,7 +50,7 @@ public class MinesweeperFrame extends JFrame {
     }
 
     private JPanel createTopPanel() {
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        final JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         flagsLabel = new JLabel("Flags: 10");
         flagsLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
@@ -129,7 +128,7 @@ public class MinesweeperFrame extends JFrame {
             button.setEnabled(true);
 
         } else if (model.isRevealed(row, col)) {
-            int adjacentBombs = model.countAdjacentBombs(row, col);
+            final int adjacentBombs = model.countAdjacentBombs(row, col);
 
             button.setOpaque(true);
             button.setContentAreaFilled(false);
@@ -153,14 +152,32 @@ public class MinesweeperFrame extends JFrame {
 
                 // choose color based on number
                 switch (adjacentBombs) {
-                    case 1: label.setForeground(BLUE_1);  break;
-                    case 2: label.setForeground(GREEN_2); break;
-                    case 3: label.setForeground(RED_3);   break;
-                    case 4: label.setForeground(DARK_BLUE_4); break;
-                    case 5: label.setForeground(MAROON_5);    break;
-                    case 6: label.setForeground(CYAN_6);      break;
-                    case 7: label.setForeground(BLACK_7);     break;
-                    case 8: label.setForeground(GRAY_8);      break;
+                    case 1:
+                        label.setForeground(BLUE_1);
+                        break;
+                    case 2:
+                        label.setForeground(GREEN_2);
+                        break;
+                    case 3:
+                        label.setForeground(RED_3);
+                        break;
+                    case 4:
+                        label.setForeground(DARK_BLUE_4);
+                        break;
+                    case 5:
+                        label.setForeground(MAROON_5);
+                        break;
+                    case 6:
+                        label.setForeground(CYAN_6);
+                        break;
+                    case 7:
+                        label.setForeground(BLACK_7);
+                        break;
+                    case 8:
+                        label.setForeground(GRAY_8);
+                        break;
+                    default:
+                        break;
                 }
                 button.add(label, BorderLayout.CENTER);
                 button.revalidate();
@@ -195,6 +212,7 @@ public class MinesweeperFrame extends JFrame {
             }
         }
     }
+
     public void updateFlagsLabel() {
         Minesweeper model = controller.getModel();
 

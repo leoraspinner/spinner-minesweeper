@@ -1,4 +1,5 @@
 package spinner.minesweeper;
+
 /*This is the model (game logic)
 - Handles bomb placement, cell revealing, win/lose detection
 - No UI code - AI will be using this code
