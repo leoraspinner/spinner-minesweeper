@@ -123,7 +123,7 @@ public class MinesweeperFrame extends JFrame {
         if (model.isFlagged(row, col)) {
             displayFlaggedCell(button);
         } else if (model.isRevealed(row, col)) {
-            displayRevealedCell(button, model.countAdjacentBombs(row, col));
+            displayRevealedCell(button, row, col);  // Pass row and col
         } else {
             displayUnrevealedCell(button);
         }
@@ -137,18 +137,33 @@ public class MinesweeperFrame extends JFrame {
         button.setEnabled(true);
     }
 
-    private void displayRevealedCell(JButton button, int adjacentBombs) {
+    private void displayRevealedCell(JButton button, int row, int col) {
+        Minesweeper model = controller.getModel();
+
         button.setOpaque(true);
         button.setContentAreaFilled(false);
         button.setBackground(REVEALED_CELL);
         button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
         button.setEnabled(false);
 
-        if (adjacentBombs == 0) {
-            displayEmptyRevealedCell(button);
+        if (model.hasBomb(row, col)) {
+            displayBombCell(button);
         } else {
-            displayNumberedCell(button, adjacentBombs);
+            int adjacentBombs = model.countAdjacentBombs(row, col);
+            if (adjacentBombs == 0) {
+                displayEmptyRevealedCell(button);
+            } else {
+                displayNumberedCell(button, adjacentBombs);
+            }
         }
+    }
+
+    private void displayBombCell(JButton button) {
+        button.removeAll();
+        button.setText("💣");
+        button.setForeground(Color.BLACK);
+        button.revalidate();
+        button.repaint();
     }
 
     private void displayEmptyRevealedCell(JButton button) {
