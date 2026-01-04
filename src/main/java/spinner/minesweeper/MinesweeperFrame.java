@@ -138,7 +138,7 @@ public class MinesweeperFrame extends JFrame {
     }
 
     private void displayRevealedCell(JButton button, int row, int col) {
-        Minesweeper model = controller.getModel();
+        final Minesweeper model = controller.getModel();
 
         button.setOpaque(true);
         button.setContentAreaFilled(false);
