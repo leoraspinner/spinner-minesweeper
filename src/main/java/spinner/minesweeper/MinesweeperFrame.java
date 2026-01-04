@@ -121,77 +121,85 @@ public class MinesweeperFrame extends JFrame {
         Minesweeper model = controller.getModel();
 
         if (model.isFlagged(row, col)) {
-            button.setText("🚩");
-            button.setForeground(FLAG_COLOR);
-            button.setBackground(UNREVEALED_CELL);
-            button.setBorder(BorderFactory.createRaisedBevelBorder());
-            button.setEnabled(true);
-
+            displayFlaggedCell(button);
         } else if (model.isRevealed(row, col)) {
-            final int adjacentBombs = model.countAdjacentBombs(row, col);
-
-            button.setOpaque(true);
-            button.setContentAreaFilled(false);
-
-            button.setBackground(REVEALED_CELL);
-            button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
-            button.setEnabled(true);
-
-            if (adjacentBombs == 0) {
-                button.removeAll();
-                button.setText("");
-                button.revalidate();
-                button.repaint();
-            } else {
-                button.setText("");               // clear any old text
-                button.removeAll();              // remove any old label
-                button.setLayout(new BorderLayout());
-
-                JLabel label = new JLabel(String.valueOf(adjacentBombs), SwingConstants.CENTER);
-                label.setFont(button.getFont());
-
-                // choose color based on number
-                switch (adjacentBombs) {
-                    case 1:
-                        label.setForeground(BLUE_1);
-                        break;
-                    case 2:
-                        label.setForeground(GREEN_2);
-                        break;
-                    case 3:
-                        label.setForeground(RED_3);
-                        break;
-                    case 4:
-                        label.setForeground(DARK_BLUE_4);
-                        break;
-                    case 5:
-                        label.setForeground(MAROON_5);
-                        break;
-                    case 6:
-                        label.setForeground(CYAN_6);
-                        break;
-                    case 7:
-                        label.setForeground(BLACK_7);
-                        break;
-                    case 8:
-                        label.setForeground(GRAY_8);
-                        break;
-                    default:
-                        break;
-                }
-                button.add(label, BorderLayout.CENTER);
-                button.revalidate();
-                button.repaint();
-            }
-
-            button.setEnabled(false);
-
+            displayRevealedCell(button, model.countAdjacentBombs(row, col));
         } else {
-            button.setText("");
-            button.setBackground(UNREVEALED_CELL);
-            button.setBorder(BorderFactory.createRaisedBevelBorder());
-            button.setEnabled(true);
+            displayUnrevealedCell(button);
         }
+    }
+
+    private void displayFlaggedCell(JButton button) {
+        button.setText("🚩");
+        button.setForeground(FLAG_COLOR);
+        button.setBackground(UNREVEALED_CELL);
+        button.setBorder(BorderFactory.createRaisedBevelBorder());
+        button.setEnabled(true);
+    }
+
+    private void displayRevealedCell(JButton button, int adjacentBombs) {
+        button.setOpaque(true);
+        button.setContentAreaFilled(false);
+        button.setBackground(REVEALED_CELL);
+        button.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        button.setEnabled(false);
+
+        if (adjacentBombs == 0) {
+            displayEmptyRevealedCell(button);
+        } else {
+            displayNumberedCell(button, adjacentBombs);
+        }
+    }
+
+    private void displayEmptyRevealedCell(JButton button) {
+        button.removeAll();
+        button.setText("");
+        button.revalidate();
+        button.repaint();
+    }
+
+    private void displayNumberedCell(JButton button, int adjacentBombs) {
+        button.setText("");
+        button.removeAll();
+        button.setLayout(new BorderLayout());
+
+        JLabel label = new JLabel(String.valueOf(adjacentBombs), SwingConstants.CENTER);
+        label.setFont(button.getFont());
+        label.setForeground(getColorForNumber(adjacentBombs));
+
+        button.add(label, BorderLayout.CENTER);
+        button.revalidate();
+        button.repaint();
+    }
+
+    private Color getColorForNumber(int number) {
+        switch (number) {
+            case 1:
+                return BLUE_1;
+            case 2:
+                return GREEN_2;
+            case 3:
+                return RED_3;
+            case 4:
+                return DARK_BLUE_4;
+            case 5:
+                return MAROON_5;
+            case 6:
+                return CYAN_6;
+            case 7:
+                return BLACK_7;
+            case 8:
+                return GRAY_8;
+            default:
+                return Color.BLACK;
+        }
+    }
+
+    private void displayUnrevealedCell(JButton button) {
+        button.setText("");
+        button.setBackground(UNREVEALED_CELL);
+        button.setBorder(BorderFactory.createRaisedBevelBorder());
+        button.setEnabled(true);
     }
 
 

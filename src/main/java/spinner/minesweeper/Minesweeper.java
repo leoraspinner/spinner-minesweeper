@@ -10,7 +10,7 @@ import java.util.Random;
 public class Minesweeper
 {
     private static final int BOARD_SIZE = 9;
-    private static final int NUM_BOMBS = 5;
+    private static final int NUM_BOMBS = 10;
     private boolean[][] bombs;
     private boolean[][] revealed;
     private boolean[][] flagged;
