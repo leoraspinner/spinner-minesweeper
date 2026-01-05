@@ -274,7 +274,9 @@ public class Minesweeper
 
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
-                if (dr == 0 && dc == 0) continue; // Skip self
+                if (dr == 0 && dc == 0) {
+                    continue; // Skip self
+                }
 
                 int newRow = row + dr;
                 int newCol = col + dc;
@@ -296,7 +298,9 @@ public class Minesweeper
 
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
-                if (dr == 0 && dc == 0) continue;
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
 
                 int newRow = row + dr;
                 int newCol = col + dc;
@@ -314,7 +318,9 @@ public class Minesweeper
     {
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
-                if (dr == 0 && dc == 0) continue;
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
 
                 int newRow = row + dr;
                 int newCol = col + dc;
@@ -333,7 +339,9 @@ public class Minesweeper
     private void revealHiddenNeighbors(int row, int col) {
         for (int dr = -1; dr <= 1; dr++) {
             for (int dc = -1; dc <= 1; dc++) {
-                if (dr == 0 && dc == 0) continue;
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
 
                 int newRow = row + dr;
                 int newCol = col + dc;
