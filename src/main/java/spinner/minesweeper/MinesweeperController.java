@@ -62,5 +62,33 @@ public class MinesweeperController
         return model;
     }
 
+    public void handleAutoFlag() {
+        if (model.getGameState() != Minesweeper.GameState.PLAYING) {
+            return;
+        }
 
+        model.autoFlag();
+        view.updateBoard();
+        view.updateFlagsLabel();
+    }
+
+    public void handleAutoReveal() {
+        if (model.getGameState() != Minesweeper.GameState.PLAYING) {
+            return;
+        }
+
+        model.autoReveal();
+        view.updateBoard();
+
+        if (model.getGameState() == Minesweeper.GameState.WON) {
+            view.stopTimer();
+            view.showWin();
+        } else if (model.getGameState() == Minesweeper.GameState.LOST) {
+            view.stopTimer();
+            model.revealAllCells();
+            view.updateBoard();
+            view.revealAllBombs();
+            view.showGameOver();
+        }
+    }
 }

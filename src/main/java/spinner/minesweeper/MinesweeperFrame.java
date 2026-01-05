@@ -56,14 +56,23 @@ public class MinesweeperFrame extends JFrame {
 
         newGameButton = new JButton("New Game");
         newGameButton.setFont(new Font("Arial", Font.PLAIN, 14));
-
         newGameButton.addActionListener(e -> controller.handleNewGame());
+
+        JButton autoFlagButton = new JButton("Auto Flag");
+        autoFlagButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        autoFlagButton.addActionListener(e -> controller.handleAutoFlag());
+
+        JButton autoRevealButton = new JButton("Auto Reveal");
+        autoRevealButton.setFont(new Font("Arial", Font.PLAIN, 14));
+        autoRevealButton.addActionListener(e -> controller.handleAutoReveal());
 
         timerLabel = new JLabel("Time: 000");
         timerLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
         topPanel.add(flagsLabel);
         topPanel.add(newGameButton);
+        topPanel.add(autoFlagButton);
+        topPanel.add(autoRevealButton);
         topPanel.add(timerLabel);
 
         return topPanel;
