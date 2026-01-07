@@ -216,4 +216,204 @@ public class Minesweeper
 
         return visible;
     }
+
+    public void autoFlag() {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                // Skip unrevealed, flagged, or bomb cells
+                if (!revealed[row][col] || flagged[row][col] || bombs[row][col]) {
+                    continue;
+                }
+
+                // For numbered cells
+                int adjacentBombs = countAdjacentBombs(row, col);
+
+                // Skip empty cells
+                if (adjacentBombs == 0) {
+                    continue;
+                }
+
+                // Count hidden and flagged neighbors
+                int hiddenCount = countHiddenNeighbors(row, col);
+                int flaggedCount = countFlaggedNeighbors(row, col);
+
+                // Cell is "satisfied" if hidden + flagged == number of mines
+                if (hiddenCount + flaggedCount == adjacentBombs) {
+                    // All hidden neighbors must be bombs - flag them
+                    flagHiddenNeighbors(row, col);
+                }
+            }
+        }
+    }
+
+    public void autoReveal() {
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                // Skip unrevealed, flagged, or bomb cells
+                if (!revealed[row][col] || flagged[row][col] || bombs[row][col]) {
+                    continue;
+                }
+
+                int adjacentBombs = countAdjacentBombs(row, col);
+
+                if (adjacentBombs == 0) {
+                    continue;
+                }
+
+                int flaggedCount = countFlaggedNeighbors(row, col);
+
+                if (flaggedCount == adjacentBombs) {
+                    revealHiddenNeighbors(row, col);
+                }
+            }
+        }
+    }
+
+    private int countHiddenNeighbors(int row, int col) {
+        int count = 0;
+
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue; // Skip self
+                }
+
+                int newRow = row + dr;
+                int newCol = col + dc;
+
+                if (isValid(newRow, newCol)) {
+                    // Hidden = not revealed AND not flagged
+                    if (!revealed[newRow][newCol] && !flagged[newRow][newCol]) {
+                        count++;
+                    }
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private int countFlaggedNeighbors(int row, int col) {
+        int count = 0;
+
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
+
+                int newRow = row + dr;
+                int newCol = col + dc;
+
+                if (isValid(newRow, newCol) && flagged[newRow][newCol]) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private void flagHiddenNeighbors(int row, int col)
+    {
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
+
+                int newRow = row + dr;
+                int newCol = col + dc;
+
+                if (isValid(newRow, newCol)) {
+                    // Flag if hidden (not revealed and not already flagged)
+                    if (!revealed[newRow][newCol] && !flagged[newRow][newCol]) {
+                        flagged[newRow][newCol] = true;
+                        flagCount++;
+                    }
+                }
+            }
+        }
+    }
+
+    private void revealHiddenNeighbors(int row, int col) {
+        for (int dr = -1; dr <= 1; dr++) {
+            for (int dc = -1; dc <= 1; dc++) {
+                if (dr == 0 && dc == 0) {
+                    continue;
+                }
+
+                int newRow = row + dr;
+                int newCol = col + dc;
+
+                if (isValid(newRow, newCol)) {
+                    // Reveal if hidden (not revealed and not flagged)
+                    if (!revealed[newRow][newCol] && !flagged[newRow][newCol]) {
+                        revealCell(newRow, newCol);
+                    }
+                }
+            }
+        }
+    }
+
+    public double[] toInput() {
+        int size = BOARD_SIZE * BOARD_SIZE;
+        double[] input = new double[size];
+
+        int index = 0;
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (flagged[row][col]) {
+                    input[index] = 1.0;
+                } else if (revealed[row][col]) {
+                    int num = countAdjacentBombs(row, col);
+                    input[index] = (num == 0) ? 0.1 : num * 0.1;
+                } else {
+                    // Hidden cell
+                    input[index] = 0.0;
+                }
+                index++;
+            }
+        }
+
+        return input;
+    }
+
+    public double[] toOutput() {
+        int size = BOARD_SIZE * BOARD_SIZE; // 81
+        double[] output = new double[size];
+
+        int index = 0;
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                output[index] = flagged[row][col] ? 1.0 : 0.0;
+                index++;
+            }
+        }
+
+        return output;
+    }
+
+    public Minesweeper deepCopy() {
+        Minesweeper copy = new Minesweeper();
+
+        // Copy arrays using streams
+        copy.bombs = java.util.Arrays.stream(this.bombs)
+                .map(boolean[]::clone)
+                .toArray(boolean[][]::new);
+
+        copy.revealed = java.util.Arrays.stream(this.revealed)
+                .map(boolean[]::clone)
+                .toArray(boolean[][]::new);
+
+        copy.flagged = java.util.Arrays.stream(this.flagged)
+                .map(boolean[]::clone)
+                .toArray(boolean[][]::new);
+
+        // Copy simple fields
+        copy.flagCount = this.flagCount;
+        copy.gameState = this.gameState;
+
+        return copy;
+    }
 }
