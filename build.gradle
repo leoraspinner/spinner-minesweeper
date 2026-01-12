@@ -12,6 +12,7 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation files('libs/basic_neural_network-v0.5.2-jar-with-dependencies.jar')
 }
 
 test {

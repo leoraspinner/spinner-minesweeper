@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class Minesweeper
 {
-    private static final int BOARD_SIZE = 9;
-    private static final int NUM_BOMBS = 10;
+    private final int BOARD_SIZE;
+    private final int NUM_BOMBS;
     private boolean[][] bombs;
     private boolean[][] revealed;
     private boolean[][] flagged;
@@ -27,6 +27,13 @@ public class Minesweeper
     }
 
     public Minesweeper() {
+        this(9, 10);
+    }
+
+    public Minesweeper(int boardSize, int numBombs) {
+        this.BOARD_SIZE = boardSize;
+        this.NUM_BOMBS = numBombs;
+
         bombs = new boolean[BOARD_SIZE][BOARD_SIZE];
         revealed = new boolean[BOARD_SIZE][BOARD_SIZE];
         flagged = new boolean[BOARD_SIZE][BOARD_SIZE];
@@ -395,7 +402,7 @@ public class Minesweeper
     }
 
     public Minesweeper deepCopy() {
-        Minesweeper copy = new Minesweeper();
+        Minesweeper copy = new Minesweeper(this.BOARD_SIZE, this.NUM_BOMBS);
 
         // Copy arrays using streams
         copy.bombs = java.util.Arrays.stream(this.bombs)
