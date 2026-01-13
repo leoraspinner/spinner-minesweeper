@@ -49,4 +49,3 @@ build/
 .DS_STORE
 **/apikey.properties
 nn_data.json
-libs/
