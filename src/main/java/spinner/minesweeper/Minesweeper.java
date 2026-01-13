@@ -9,8 +9,8 @@ import java.util.Random;
 
 public class Minesweeper
 {
-    private final int BOARD_SIZE;
-    private final int NUM_BOMBS;
+    private final int boardSize;
+    private final int numBombs;
     private boolean[][] bombs;
     private boolean[][] revealed;
     private boolean[][] flagged;
@@ -31,12 +31,12 @@ public class Minesweeper
     }
 
     public Minesweeper(int boardSize, int numBombs) {
-        this.BOARD_SIZE = boardSize;
-        this.NUM_BOMBS = numBombs;
+        this.boardSize = boardSize;
+        this.numBombs = numBombs;
 
-        bombs = new boolean[BOARD_SIZE][BOARD_SIZE];
-        revealed = new boolean[BOARD_SIZE][BOARD_SIZE];
-        flagged = new boolean[BOARD_SIZE][BOARD_SIZE];
+        bombs = new boolean[this.boardSize][this.boardSize];
+        revealed = new boolean[this.boardSize][this.boardSize];
+        flagged = new boolean[this.boardSize][this.boardSize];
 
         gameState = GameState.PLAYING;
         flagCount = 0;
@@ -48,9 +48,9 @@ public class Minesweeper
         Random random = new Random();
         int bombsPlaced = 0;
 
-        while (bombsPlaced < NUM_BOMBS) {
-            int row = random.nextInt(BOARD_SIZE);
-            int col = random.nextInt(BOARD_SIZE);
+        while (bombsPlaced < numBombs) {
+            int row = random.nextInt(boardSize);
+            int col = random.nextInt(boardSize);
 
             if (!bombs[row][col]) {
                 bombs[row][col] = true;
@@ -91,8 +91,8 @@ public class Minesweeper
     }
 
     public void revealAllCells() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 revealed[row][col] = true;
             }
         }
@@ -159,15 +159,15 @@ public class Minesweeper
     private void checkWinCondition() {
         // Count how many non-bomb cells are revealed
         int revealedCount = 0;
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 if (revealed[row][col] && !bombs[row][col]) {
                     revealedCount++;
                 }
             }
         }
 
-        int totalNonBombs = BOARD_SIZE * BOARD_SIZE - NUM_BOMBS;
+        int totalNonBombs = boardSize * boardSize - numBombs;
 
         if (revealedCount == totalNonBombs) {
             gameState = GameState.WON;
@@ -175,7 +175,7 @@ public class Minesweeper
     }
 
     private boolean isValid(int row, int col) {
-        return row >= 0 && row < BOARD_SIZE && col >= 0 && col < BOARD_SIZE;
+        return row >= 0 && row < boardSize && col >= 0 && col < boardSize;
     }
 
     public GameState getGameState() {
@@ -183,7 +183,7 @@ public class Minesweeper
     }
 
     public int getBoardSize() {
-        return BOARD_SIZE;
+        return boardSize;
     }
 
     public boolean isRevealed(int row, int col) {
@@ -203,14 +203,14 @@ public class Minesweeper
     }
 
     public int getTotalBombs() {
-        return NUM_BOMBS;
+        return numBombs;
     }
 
     public int[][] getVisibleBoard() {
-        int[][] visible = new int[BOARD_SIZE][BOARD_SIZE];
+        int[][] visible = new int[boardSize][boardSize];
 
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 if (flagged[row][col]) {
                     visible[row][col] = -1;
                 } else if (!revealed[row][col]) {
@@ -225,8 +225,8 @@ public class Minesweeper
     }
 
     public void autoFlag() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 // Skip unrevealed, flagged, or bomb cells
                 if (!revealed[row][col] || flagged[row][col] || bombs[row][col]) {
                     continue;
@@ -254,8 +254,8 @@ public class Minesweeper
     }
 
     public void autoReveal() {
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 // Skip unrevealed, flagged, or bomb cells
                 if (!revealed[row][col] || flagged[row][col] || bombs[row][col]) {
                     continue;
@@ -364,12 +364,12 @@ public class Minesweeper
     }
 
     public double[] toInput() {
-        int size = BOARD_SIZE * BOARD_SIZE;
+        int size = boardSize * boardSize;
         double[] input = new double[size];
 
         int index = 0;
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 if (flagged[row][col]) {
                     input[index] = 1.0;
                 } else if (revealed[row][col]) {
@@ -387,12 +387,12 @@ public class Minesweeper
     }
 
     public double[] toOutput() {
-        int size = BOARD_SIZE * BOARD_SIZE; // 81
+        int size = boardSize * boardSize; // 81
         double[] output = new double[size];
 
         int index = 0;
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
                 output[index] = flagged[row][col] ? 1.0 : 0.0;
                 index++;
             }
@@ -402,7 +402,7 @@ public class Minesweeper
     }
 
     public Minesweeper deepCopy() {
-        Minesweeper copy = new Minesweeper(this.BOARD_SIZE, this.NUM_BOMBS);
+        Minesweeper copy = new Minesweeper(this.boardSize, this.numBombs);
 
         // Copy arrays using streams
         copy.bombs = java.util.Arrays.stream(this.bombs)

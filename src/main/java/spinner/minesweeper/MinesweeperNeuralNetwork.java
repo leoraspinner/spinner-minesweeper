@@ -37,11 +37,11 @@ public class MinesweeperNeuralNetwork {
                     }
                 }
                 double accuracy = (double) wins / 1000;
-                System.out.println("accuracy/wins/games/total_games = " +
-                        String.format("%.4f", accuracy) + "/" +
-                        wins + "/" +
-                        1000 + "/" +
-                        (game + 1));
+                System.out.println("accuracy/wins/games/total_games = "
+                        + String.format("%.4f", accuracy) + "/"
+                        + wins + "/"
+                        + 1000 + "/"
+                        + (game + 1));
             }
         }
 
