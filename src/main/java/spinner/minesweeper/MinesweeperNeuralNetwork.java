@@ -121,13 +121,20 @@ public class MinesweeperNeuralNetwork {
 
     private void makeRandomMove(Minesweeper game) {
         Random random = new Random();
-        while (true) {
-            int row = random.nextInt(BOARD_SIZE);
-            int col = random.nextInt(BOARD_SIZE);
-            if (!game.isRevealed(row, col) && !game.isFlagged(row, col)) {
-                game.revealCell(row, col);
-                break;
+        java.util.List<int[]> availableCells = new java.util.ArrayList<>();
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (!game.isRevealed(row, col) && !game.isFlagged(row, col)) {
+                    availableCells.add(new int[]{row, col});
+                }
             }
+        }
+
+        //if there are available cells, pick one randomly
+        if (!availableCells.isEmpty()) {
+            int randomIndex = random.nextInt(availableCells.size());
+            int[] cell = availableCells.get(randomIndex);
+            game.revealCell(cell[0], cell[1]);
         }
     }
 
